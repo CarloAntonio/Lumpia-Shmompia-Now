@@ -39,21 +39,19 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     //Variables
     SharedPreferences sharedPreferences;
 
-    //Fields
+    //Views
     @BindView(R.id.menu_container)
     ImageView menuContainerImageView;
-
     @BindView(R.id.restaurant_container)
     ImageView restaurantContainerImageView;
-
     @BindView(R.id.reorder_container)
     ImageView reorderContainerImageView;
-
     @BindView(R.id.youtube_view)
     YouTubePlayerView mTubePlayerView;
-
     @BindView(R.id.main_reorder_view)
     FrameLayout reoderFrameLayout;
+    @BindView(R.id.adView)
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +105,6 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         });
 
-        AdView mAdView = findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
