@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -68,6 +69,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     LinearLayout borderLayout;
     @BindView(R.id.detail_fab)
     FloatingActionButton detailFab;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //TODO: bug - fix toolbar name, not changing to food type
 
         //pull uri data from intent
         Intent receivingIntent = getIntent();
@@ -136,7 +138,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             descriptionTV.setText(mItemDescrip);
             priceTV.setText("$" + mItemPrice);
             historyTV.setText(mItemHist);
-            getSupportActionBar().setTitle(mItemName);
+            //since collapsing toolbar layout used, title must be set here instead of support toolbar
+            mCollapsingToolbarLayout.setTitle(mItemName);
 
             //update the border and FAB color
             updateBorderColor(mItemImgRes);
