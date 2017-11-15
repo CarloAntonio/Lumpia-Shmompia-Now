@@ -35,13 +35,16 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
     //Constants
     public static final int MENU_LOADER = 0;
 
+    //Views
     @BindView(R.id.menu_gv)
     GridView menuGridView;
 
+    //Fields
     MenuCursorAdapter mMenuCursorAdapter;
     SharedPreferences mSharedPreferences;
     OnMenuItemClickListener mListener;
 
+    //Interface, connects to Menu Activity
     public interface OnMenuItemClickListener {
         void onMenuItemClicked(long id);
     }
@@ -52,31 +55,37 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
         View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
         ButterKnife.bind(this, rootView);
 
+        //get reference to shared preferences
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
+        //setup grid
         mMenuCursorAdapter = new MenuCursorAdapter(getContext(), null);
-
         menuGridView.setAdapter(mMenuCursorAdapter);
 
+        //handle food item clicks
         menuGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //check if layout is two panel
                 Boolean isTwoPanel = mSharedPreferences.getBoolean(getString(R.string.is_two_panel), false);
 
                 if (isTwoPanel) {
+                    //if tablet layout, pass the item id to menu activity
                     mListener.onMenuItemClicked(id);
+
                 } else {
+                    //if phone layout, open details activity and present user selected item
                     Intent intent = new Intent(getContext(), DetailActivity.class);
-
+                    //pass in menu uri to details activity
                     Uri currentMenuUri = ContentUris.withAppendedId(MenuEntry.CONTENT_URI, id);
-
                     intent.setData(currentMenuUri);
-
+                    //start activity
                     startActivityForResult(intent, 1);
                 }
             }
         });
 
+        //load all items in database and display to user
         getLoaderManager().initLoader(MENU_LOADER, null, this);
 
         return rootView;
@@ -86,6 +95,7 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        //check if activity has implemented the listener
         try {
             mListener = (OnMenuItemClickListener) context;
         } catch (ClassCastException CCE) {
@@ -96,7 +106,7 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        //Define projection
+        //define projection (column values you want returned)
         String[] projection = {
                 MenuEntry._ID,
                 MenuEntry.COlUMN_ITEM_NAME,
@@ -104,19 +114,19 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
                 MenuEntry.COLUMN_ITEM_RESOURCE
         };
 
-        //Loader that will query Content Provider
-        CursorLoader cursorLoader = new CursorLoader(getContext(),
+        //loader that will query Content Provider, return to onLoadFinished
+        return new CursorLoader(getContext(),
                 MenuEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
                 null);
 
-        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //swap out the blank place holder with returned data
         mMenuCursorAdapter.swapCursor(data);
     }
 
@@ -125,6 +135,8 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
         mMenuCursorAdapter.swapCursor(null);
     }
 
+    //refreshes page so that shopping icon updates correctly
+    //TODO: refactor - there may be a better way to do this, check for future date
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

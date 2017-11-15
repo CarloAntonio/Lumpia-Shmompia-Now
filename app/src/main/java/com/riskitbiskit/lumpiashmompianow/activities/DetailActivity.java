@@ -1,5 +1,6 @@
 package com.riskitbiskit.lumpiashmompianow.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -41,28 +42,29 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     //Constants
     public static final int DETAIL_LOADER = 0;
 
-    //Variables
+    //Fields
     private Uri requestedMenuItemURI;
     private SharedPreferences mSharedPreferences;
+    private Context mContext = getBaseContext();
+    String mItemName;
+    String mItemPrice;
+    String mItemDescrip;
+    String mItemHist;
+    int mItemImgRes;
 
+    //Views
     @BindView(R.id.detail_toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.detail_image_frame)
     ImageView detailFrame;
-
     @BindView(R.id.food_description_tv)
     TextView descriptionTV;
-
     @BindView(R.id.food_price_tv)
     TextView priceTV;
-
     @BindView(R.id.food_history_tv)
     TextView historyTV;
-
     @BindView(R.id.detail_border)
     LinearLayout borderLayout;
-
     @BindView(R.id.detail_fab)
     FloatingActionButton detailFab;
 
@@ -72,18 +74,19 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        //Setup Toolbar
+        //setup Toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        //Catch intent
+        //pull uri data from intent
         Intent receivingIntent = getIntent();
         requestedMenuItemURI = receivingIntent.getData();
 
-        //Initialize sharedPreference
+        //initialize sharedPreference
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //setup UI with received uri using the database
         getSupportLoaderManager().initLoader(DETAIL_LOADER, null, this);
     }
 
@@ -108,43 +111,43 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 MenuEntry.COLUMN_ITEM_RESOURCE
         };
 
-        CursorLoader cursorLoader = new CursorLoader(this,
+        return new CursorLoader(this,
                 requestedMenuItemURI,
                 projection,
                 null,
                 null,
                 null);
 
-        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            final String itemName = data.getString(data.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME));
-            String itemPrice = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_PRICE));
-            String itemDesc = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_DESCRIPTION));
-            String itemHist = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_HISTORY));
-            int itemImgRes = data.getInt(data.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
+            mItemName = data.getString(data.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME));
+            mItemPrice = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_PRICE));
+            mItemDescrip = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_DESCRIPTION));
+            mItemHist = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_HISTORY));
+            mItemImgRes = data.getInt(data.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
 
-            //Set data to relevant views
-            Glide.with(getBaseContext()).load(itemImgRes).into(detailFrame);
-            descriptionTV.setText(itemDesc);
-            priceTV.setText("$" + itemPrice);
-            historyTV.setText(itemHist);
-            getSupportActionBar().setTitle(itemName);
+            //set data to relevant views
+            Glide.with(mContext).load(mItemImgRes).into(detailFrame);
+            descriptionTV.setText(mItemDescrip);
+            priceTV.setText("$" + mItemPrice);
+            historyTV.setText(mItemHist);
+            getSupportActionBar().setTitle(mItemName);
 
-            //Update the border color
-            updateBorderColor(itemImgRes);
+            //update the border and FAB color
+            updateBorderColor(mItemImgRes);
 
             //Setup FAB
             detailFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //check to see there is already a list of selected food items in shared pref
                     if (mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
-                        //if no list, create a list
+                        //if not, create a list
                         ArrayList<String> cartList = new ArrayList<>();
-                        cartList.add(itemName);
+                        cartList.add(mItemName);
 
                         //Convert list to String via Gson
                         Gson gson = new Gson();
@@ -166,7 +169,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
                         for(int i = 0; i < cartList.size(); i++) {
                             String currentItem = cartList.get(i);
-                            if (currentItem.contentEquals(itemName)) {
+                            if (currentItem.contentEquals(mItemName)) {
                                 isCopy = true;
                                 break;
                             } else {
@@ -178,7 +181,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.makeText(getBaseContext(), R.string.already_in_cart, Toast.LENGTH_SHORT).show();
                         } else {
                             //Add to list
-                            cartList.add(itemName);
+                            cartList.add(mItemName);
                             String newJson = gson.toJson(cartList);
 
                             //Add updated list to shared preference
@@ -196,6 +199,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //Do nothing
+    }
+
+    //update border and FAB based on image for better UX
     private void updateBorderColor(int itemImgRes) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), itemImgRes);
 
@@ -206,11 +215,5 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 detailFab.setBackgroundTintList(ColorStateList.valueOf(palette.getMutedSwatch().getRgb()));
             }
         });
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }

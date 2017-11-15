@@ -16,11 +16,11 @@ import com.riskitbiskit.lumpiashmompianow.data.MenuContract.MenuEntry;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class MenuCursorAdapter extends CursorAdapter {
+
+    //Views
     @BindView(R.id.food_iv)
     ImageView menuItemIV;
-
     @BindView(R.id.food_name_tv)
     TextView foodNameTV;
 
@@ -37,10 +37,11 @@ public class MenuCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ButterKnife.bind(this, view);
 
-        int itemResource = cursor.getInt(cursor.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
-        String itemName = cursor.getString(cursor.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME));
+        Glide.with(context)
+                //TODO: feat - add a loading picture for better UX
+                .load(cursor.getInt(cursor.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE)))
+                .into(menuItemIV);
 
-        Glide.with(context).load(itemResource).into(menuItemIV);
-        foodNameTV.setText(itemName);
+        foodNameTV.setText(cursor.getString(cursor.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME)));
     }
 }
