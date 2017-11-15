@@ -189,6 +189,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         return true;
     }
 
+    //TODO: refactor - more AdapterClickListener to its own seperate class
     public class AdapterClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
