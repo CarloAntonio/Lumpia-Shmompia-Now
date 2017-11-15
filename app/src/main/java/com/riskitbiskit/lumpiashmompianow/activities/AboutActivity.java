@@ -1,6 +1,7 @@
 package com.riskitbiskit.lumpiashmompianow.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -51,23 +52,19 @@ public class AboutActivity extends AppCompatActivity {
     public static final String LOG_TAG = AboutActivity.class.getSimpleName();
 
     //Variables
-    private String[] mMenuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
     private SharedPreferences sharedPreferences;
+    Context mContext= this;
 
     //Views
     @BindView(R.id.about_toolbar)
     Toolbar aboutToolbar;
-
     @BindView(R.id.about_drawer_layout)
     DrawerLayout mDrawerLayout;
-
     @BindView(R.id.about_left_drawer)
     ListView mDrawerList;
-
     @BindView(R.id.to_map_bt)
     Button directionsButton;
-
     @BindView(R.id.current_weather)
     TextView weatherTV;
 
@@ -77,22 +74,25 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
 
-        //Kick-off asynctask
+        //kick-off asynctask
         WeatherAsyncTask task = new WeatherAsyncTask();
         task.execute();
 
-        //Setup custom toolbar
+        //setup custom toolbar
         setSupportActionBar(aboutToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //Get reference of Shared Preference
+        //get reference of Shared Preference
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //Setup Hamburger Menu
-        mMenuTitles = getResources().getStringArray(R.array.menu_options);
 
         mDrawerLayout.setScrimColor(ContextCompat.getColor(this, android.R.color.transparent));
 
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mMenuTitles));
+        //setup drawer clickable items
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
+
+        //set up click events with custom item click listener inner class
         mDrawerList.setOnItemClickListener(new AboutActivity.AdapterClickListener());
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {
@@ -111,16 +111,12 @@ public class AboutActivity extends AppCompatActivity {
 
         mDrawerToggle.setDrawerIndicatorEnabled(true);
 
-        //Performs drawer <-> back button animation
+        //performs drawer <-> back button animation
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawerToggle.syncState();
 
-        //Setup directions button
+        //setup directions button
         directionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,7 +133,6 @@ public class AboutActivity extends AppCompatActivity {
         if(mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,24 +141,29 @@ public class AboutActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             switch (position) {
                 case 0:
-                    Intent reorderIntent = new Intent(getBaseContext(), OrderActivity.class);
+                    //TODO: fix - crashes when code is run
+                    Intent reorderIntent = new Intent(mContext, OrderActivity.class);
                     startActivity(reorderIntent);
                     return;
                 case 1:
-                    Intent menuIntent = new Intent(getBaseContext(), MenuActivity.class);
+                    //open menu activity
+                    Intent menuIntent = new Intent(mContext, MenuActivity.class);
                     startActivity(menuIntent);
                     finish();
                     return;
                 case 2:
+                    //check to see if anything is in basket
                     if (sharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
-                        Toast.makeText(getBaseContext(), R.string.nothing_in_cart, Toast.LENGTH_SHORT).show();
+                        //if nothing in basket, remind user
+                        Toast.makeText(mContext, R.string.nothing_in_cart, Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent checkoutIntent = new Intent(getBaseContext(), OrderActivity.class);
+                        //if there is, open order activity
+                        Intent checkoutIntent = new Intent(mContext, OrderActivity.class);
                         startActivity(checkoutIntent);
                     }
                     return;
                 case 3:
-                    //Delete all items in Shared Preferences
+                    //selete all items in checkout basket
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(CHECKOUT_LIST, EMPTY);
                     editor.apply();
@@ -173,22 +173,23 @@ public class AboutActivity extends AppCompatActivity {
                     contentValues.put(MenuEntry.COLUMN_ITEM_COUNT, getString(R.string.one));
                     getContentResolver().update(CONTENT_URI, contentValues, null, null);
 
+                    //TODO: chore: stay in activity, show toast of basket being cleared
                     //Restart activity
-                    Intent clearCartIntent = new Intent(getBaseContext(), MenuActivity.class);
+                    Intent clearCartIntent = new Intent(mContext, MenuActivity.class);
                     startActivity(clearCartIntent);
                     finish();
                     return;
                 case 4:
-                    Intent aboutIntent = new Intent(getBaseContext(), AboutActivity.class);
+                    Intent aboutIntent = new Intent(mContext, AboutActivity.class);
                     startActivity(aboutIntent);
                     finish();
                     return;
                 default:
-                    return;
             }
         }
     }
 
+    //TODO: refactor - replace with retrofit2
     private class WeatherAsyncTask extends AsyncTask<URL, Void, String> {
 
         double latitude = 37.906795;
@@ -318,7 +319,5 @@ public class AboutActivity extends AppCompatActivity {
             }
             return null;
         }
-
-
     }
 }

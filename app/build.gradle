@@ -53,4 +53,7 @@ dependencies {
 
     //Youtube API
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+
+    //Volley, network request library
+    compile 'com.android.volley:volley:1.0.0'
 }
