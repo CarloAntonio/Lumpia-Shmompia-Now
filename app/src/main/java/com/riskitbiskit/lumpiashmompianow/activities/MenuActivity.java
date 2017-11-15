@@ -1,6 +1,5 @@
 package com.riskitbiskit.lumpiashmompianow.activities;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,19 +15,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.riskitbiskit.lumpiashmompianow.R;
-import com.riskitbiskit.lumpiashmompianow.data.MenuContract;
 import com.riskitbiskit.lumpiashmompianow.utils.AdapterClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.riskitbiskit.lumpiashmompianow.data.MenuContract.*;
 
 public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMenuItemClickListener {
 
@@ -40,16 +35,14 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     //Variables
     private ActionBarDrawerToggle mDrawerToggle;
     private SharedPreferences mSharedPreferences;
-    private long currentItemId;
+    private long mCurrentItemId;
     private Context mContext = this;
 
     //Views
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-
     @BindView(R.id.left_drawer)
     ListView mDrawerList;
-
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -59,16 +52,67 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         setContentView(R.layout.activity_menu);
         ButterKnife.bind(this);
 
-        //Setup custom toolbar
+        //setup custom toolbar
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //Get reference of Shared Preference & SP Editor
+        //get reference of Shared Preference & SP Editor
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
+        //setup drawer
+        setupDrawer();
+
+        //check for saved instance values
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(SAVED_INSTANCE_ITEM_ID)) {
+                mCurrentItemId = savedInstanceState.getLong(SAVED_INSTANCE_ITEM_ID);
+                Log.e("Tag", mCurrentItemId + "");
+            }
+        }  else {
+            mCurrentItemId = 1;
+        }
+
+        //determine if user is using a tablet(two panel layout) or phone(single panel layout)
+        if (findViewById(R.id.two_panel_layout) != null) {
+            //save layout type for orientation changes
+            editor.putBoolean(getString(R.string.is_two_panel), true);
+            editor.apply();
+
+            //get reference of fragment manager
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            //checks to see if fragment needs to be initially created
+            if (savedInstanceState == null) {
+                //if so, create new fragment
+                DetailFragment detailFragment = new DetailFragment();
+                detailFragment.setRequestedItemUri(mCurrentItemId);
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.detail_frag_container, detailFragment)
+                        .commit();
+            } else {
+                //if not, swap new fragment
+                DetailFragment newDetailFragment = new DetailFragment();
+                newDetailFragment.setRequestedItemUri(mCurrentItemId);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.detail_frag_container, newDetailFragment)
+                        .commit();
+            }
+
+        } else {
+            editor.putBoolean(getString(R.string.is_two_panel), false);
+            editor.apply();
+        }
+    }
+
+    private void setupDrawer() {
         mDrawerLayout.setScrimColor(ContextCompat.getColor(this, android.R.color.transparent));
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
+
         mDrawerList.setOnItemClickListener(new AdapterClickListener(mContext, mSharedPreferences));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {
@@ -90,55 +134,16 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         //Performs drawer <-> back button animation
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         mDrawerToggle.syncState();
-
-        //SaveInstanceState Values
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(SAVED_INSTANCE_ITEM_ID)) {
-                currentItemId = savedInstanceState.getLong(SAVED_INSTANCE_ITEM_ID);
-                Log.e("Tag", currentItemId + "");
-            }
-        }  else {
-            currentItemId = 1;
-        }
-
-        if (findViewById(R.id.two_panel_layout) != null) {
-            editor.putBoolean(getString(R.string.is_two_panel), true);
-            editor.apply();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            if (savedInstanceState == null) {
-                DetailFragment detailFragment = new DetailFragment();
-                detailFragment.setRequestedItemUri(currentItemId);
-
-                fragmentManager.beginTransaction()
-                        .add(R.id.detail_frag_container, detailFragment)
-                        .commit();
-            } else {
-                DetailFragment newDetailFragment = new DetailFragment();
-                newDetailFragment.setRequestedItemUri(currentItemId);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_frag_container, newDetailFragment)
-                        .commit();
-            }
-
-        } else {
-            editor.putBoolean(getString(R.string.is_two_panel), false);
-            editor.apply();
-        }
     }
 
+    //for two panel, swaps detail fragment when menu item is clicked
     @Override
     public void onMenuItemClicked(long id) {
         DetailFragment newDetailFragment = new DetailFragment();
         newDetailFragment.setRequestedItemUri(id);
 
-        currentItemId = id;
+        mCurrentItemId = id;
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.detail_frag_container, newDetailFragment)
@@ -148,8 +153,9 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        outState.putLong(SAVED_INSTANCE_ITEM_ID, currentItemId);
+        //save current item, keeps fragment during orientation change, else item 1
+        //will be displayed during orientation change every time
+        outState.putLong(SAVED_INSTANCE_ITEM_ID, mCurrentItemId);
     }
 
     @Override
@@ -159,13 +165,14 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
             return true;
         }
 
+        //setup shopping cart icon actions
         switch (item.getItemId()) {
             case R.id.menu_home_action:
-                Intent intent = new Intent(getBaseContext(), OrderActivity.class);
+                Intent intent = new Intent(mContext, OrderActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_home_action_empty:
-                Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.nothing_in_cart), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getBaseContext().getString(R.string.nothing_in_cart), Toast.LENGTH_SHORT).show();
                 return true;
         }
 
@@ -175,6 +182,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
+        //determine which icon to show to user based on if items are in basket
         if (mSharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
             menu.findItem(R.id.menu_home_action).setVisible(false);
             menu.findItem(R.id.menu_home_action_empty).setVisible(true);
