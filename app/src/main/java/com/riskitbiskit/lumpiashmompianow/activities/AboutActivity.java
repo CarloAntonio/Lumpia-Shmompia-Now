@@ -94,7 +94,6 @@ public class AboutActivity extends AppCompatActivity {
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
 
         //set up click events with custom item click listener inner class
-//        mDrawerList.setOnItemClickListener(new AboutActivity.AdapterClickListener());
         mDrawerList.setOnItemClickListener(new AdapterClickListener(mContext, sharedPreferences));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {

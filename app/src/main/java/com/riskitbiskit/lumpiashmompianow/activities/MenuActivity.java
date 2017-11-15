@@ -1,6 +1,7 @@
 package com.riskitbiskit.lumpiashmompianow.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.riskitbiskit.lumpiashmompianow.R;
 import com.riskitbiskit.lumpiashmompianow.data.MenuContract;
+import com.riskitbiskit.lumpiashmompianow.utils.AdapterClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +41,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     private ActionBarDrawerToggle mDrawerToggle;
     private SharedPreferences mSharedPreferences;
     private long currentItemId;
+    private Context mContext = this;
 
     //Views
     @BindView(R.id.drawer_layout)
@@ -66,7 +69,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         mDrawerLayout.setScrimColor(ContextCompat.getColor(this, android.R.color.transparent));
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
-        mDrawerList.setOnItemClickListener(new AdapterClickListener());
+        mDrawerList.setOnItemClickListener(new AdapterClickListener(mContext, mSharedPreferences));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {
             @Override
@@ -187,64 +190,5 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.drawer_menu, menu);
         return true;
-    }
-
-    //TODO: refactor - more AdapterClickListener to its own seperate class
-    public class AdapterClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-            //Get Instance of shared preference editor
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-
-            switch (position) {
-                case 0:
-                    if (mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
-                        Toast.makeText(getBaseContext(), R.string.no_previous_order, Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Update shared preference with old order
-                        String previousOrder = mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
-                        editor.putString(MenuActivity.CHECKOUT_LIST, previousOrder);
-                        editor.apply();
-                        Intent reorderIntent = new Intent(getBaseContext(), OrderActivity.class);
-                        startActivity(reorderIntent);
-                    }
-                    return;
-                case 1:
-                    Intent menuIntent = new Intent(getBaseContext(), MenuActivity.class);
-                    startActivity(menuIntent);
-                    finish();
-                    return;
-                case 2:
-                    if (mSharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
-                        Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.nothing_in_cart), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent checkoutIntent = new Intent(getBaseContext(), OrderActivity.class);
-                        startActivity(checkoutIntent);
-                    }
-                    return;
-                case 3:
-                    //Delete all items in Shared Preferences
-                    editor.putString(CHECKOUT_LIST, EMPTY);
-                    editor.apply();
-
-                    //Reset all item totals in database
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(MenuEntry.COLUMN_ITEM_COUNT, getBaseContext().getString(R.string.one));
-                    getContentResolver().update(MenuEntry.CONTENT_URI, contentValues, null, null);
-
-                    //Restart activity
-                    Intent clearCartIntent = new Intent(getBaseContext(), MenuActivity.class);
-                    startActivity(clearCartIntent);
-                    finish();
-                    return;
-                case 4:
-                    Intent aboutIntent = new Intent(getBaseContext(), AboutActivity.class);
-                    startActivity(aboutIntent);
-                    finish();
-                    return;
-                default:
-            }
-        }
     }
 }
