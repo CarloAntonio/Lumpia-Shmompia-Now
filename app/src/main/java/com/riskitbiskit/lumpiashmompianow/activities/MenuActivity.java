@@ -206,7 +206,6 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
                         String previousOrder = mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
                         editor.putString(MenuActivity.CHECKOUT_LIST, previousOrder);
                         editor.apply();
-
                         Intent reorderIntent = new Intent(getBaseContext(), OrderActivity.class);
                         startActivity(reorderIntent);
                     }
