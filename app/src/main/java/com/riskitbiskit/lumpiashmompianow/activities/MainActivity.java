@@ -204,9 +204,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean videoRestored) {
-        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
-        youTubePlayer.setPlaybackEventListener(playbackEventListener);
-
+        
         if (!videoRestored) {
             youTubePlayer.loadVideo(INTRO_VIDEO);
         }
@@ -217,51 +215,4 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         Toast.makeText(this, R.string.video_failed_to_initialize, Toast.LENGTH_SHORT).show();
     }
 
-    private YouTubePlayer.PlaybackEventListener playbackEventListener = new YouTubePlayer.PlaybackEventListener() {
-        @Override
-        public void onPlaying() {
-        }
-
-        @Override
-        public void onPaused() {
-        }
-
-        @Override
-        public void onStopped() {
-        }
-
-        @Override
-        public void onBuffering(boolean b) {
-        }
-
-        @Override
-        public void onSeekTo(int i) {
-        }
-    };
-
-    private YouTubePlayer.PlayerStateChangeListener playerStateChangeListener = new YouTubePlayer.PlayerStateChangeListener() {
-        @Override
-        public void onLoading() {
-        }
-
-        @Override
-        public void onLoaded(String s) {
-        }
-
-        @Override
-        public void onAdStarted() {
-        }
-
-        @Override
-        public void onVideoStarted() {
-        }
-
-        @Override
-        public void onVideoEnded() {
-        }
-
-        @Override
-        public void onError(YouTubePlayer.ErrorReason errorReason) {
-        }
-    };
 }
