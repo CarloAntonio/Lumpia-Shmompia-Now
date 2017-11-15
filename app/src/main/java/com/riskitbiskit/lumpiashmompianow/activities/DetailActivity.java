@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -43,14 +44,14 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     public static final int DETAIL_LOADER = 0;
 
     //Fields
-    private Uri requestedMenuItemURI;
+    private Uri mRequestedMenuItemURI;
     private SharedPreferences mSharedPreferences;
-    private Context mContext = getBaseContext();
     String mItemName;
     String mItemPrice;
     String mItemDescrip;
     String mItemHist;
     int mItemImgRes;
+    ArrayList<String> mCartList;
 
     //Views
     @BindView(R.id.detail_toolbar)
@@ -78,10 +79,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //TODO: bug - fix toolbar name, not changing to food type
 
         //pull uri data from intent
         Intent receivingIntent = getIntent();
-        requestedMenuItemURI = receivingIntent.getData();
+        mRequestedMenuItemURI = receivingIntent.getData();
 
         //initialize sharedPreference
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -112,7 +114,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         };
 
         return new CursorLoader(this,
-                requestedMenuItemURI,
+                mRequestedMenuItemURI,
                 projection,
                 null,
                 null,
@@ -130,7 +132,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             mItemImgRes = data.getInt(data.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
 
             //set data to relevant views
-            Glide.with(mContext).load(mItemImgRes).into(detailFrame);
+            Glide.with(getBaseContext()).load(mItemImgRes).into(detailFrame);
             descriptionTV.setText(mItemDescrip);
             priceTV.setText("$" + mItemPrice);
             historyTV.setText(mItemHist);
@@ -144,55 +146,17 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 @Override
                 public void onClick(View view) {
                     //check to see there is already a list of selected food items in shared pref
-                    if (mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
-                        //if not, create a list
-                        ArrayList<String> cartList = new ArrayList<>();
-                        cartList.add(mItemName);
-
-                        //Convert list to String via Gson
-                        Gson gson = new Gson();
-                        String json = gson.toJson(cartList);
-
-                        //Add to shared preference
-                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putString(MenuActivity.CHECKOUT_LIST, json);
-                        editor.apply();
-
+                    if (mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY)
+                            .contentEquals(MenuActivity.EMPTY)) {
+                        //if not, create a list and add item to list
+                        createNewCartList();
                     } else {
-                        //Get old list first
-                        String json = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-                        ArrayList<String> cartList = gson.fromJson(json, type);
-
-                        boolean isCopy = false;
-
-                        for(int i = 0; i < cartList.size(); i++) {
-                            String currentItem = cartList.get(i);
-                            if (currentItem.contentEquals(mItemName)) {
-                                isCopy = true;
-                                break;
-                            } else {
-                                isCopy = false;
-                            }
-                        }
-
-                        if (isCopy) {
-                            Toast.makeText(getBaseContext(), R.string.already_in_cart, Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Add to list
-                            cartList.add(mItemName);
-                            String newJson = gson.toJson(cartList);
-
-                            //Add updated list to shared preference
-                            SharedPreferences.Editor editor = mSharedPreferences.edit();
-                            editor.putString(MenuActivity.CHECKOUT_LIST, newJson);
-                            editor.apply();
-
-                            Toast.makeText(getBaseContext(), R.string.added_to_cart, Toast.LENGTH_SHORT).show();
-                        }
+                        addItemToCartList();
                     }
+
+                    //tell menu activity everything completely okay
                     setResult(RESULT_OK, null);
+                    //finish the activity
                     finish();
                 }
             });
@@ -202,6 +166,63 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         //Do nothing
+    }
+
+    private void createNewCartList() {
+        //create new cart list
+        mCartList = new ArrayList<>();
+        mCartList.add(mItemName);
+
+        //Convert list to String via Gson
+        Gson gson = new Gson();
+        String json = gson.toJson(mCartList);
+
+        //Add to shared preference
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(MenuActivity.CHECKOUT_LIST, json);
+        editor.apply();
+    }
+
+    private void addItemToCartList() {
+        //get old list first
+        String json = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+
+        //convert list from string to array list
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        mCartList = gson.fromJson(json, type);
+
+        //check if item is already on the list
+        boolean isCopy = false;
+        for(int i = 0; i < mCartList.size(); i++) {
+            String currentItem = mCartList.get(i);
+            if (currentItem.contentEquals(mItemName)) {
+                isCopy = true;
+                break;
+            } else {
+                isCopy = false;
+            }
+        }
+
+        //set action for copy or unique item
+        if (isCopy) {
+            //if item already in cart, remind user
+            Toast.makeText(getBaseContext(), R.string.already_in_cart, Toast.LENGTH_SHORT).show();
+        } else {
+            //if not, add to list
+            mCartList.add(mItemName);
+
+            //convert list back to string to prep for SP saving
+            String newJson = gson.toJson(mCartList);
+
+            //Add updated list to shared preference
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putString(MenuActivity.CHECKOUT_LIST, newJson);
+            editor.apply();
+
+            //let user know that it was added to cart
+            Toast.makeText(getBaseContext(), R.string.added_to_cart, Toast.LENGTH_SHORT).show();
+        }
     }
 
     //update border and FAB based on image for better UX
