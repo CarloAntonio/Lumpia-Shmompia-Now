@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MenuActivity">
+    <item
+        android:id="@+id/menu_home_action"
+        android:icon="@drawable/ic_shopping_cart_white_24dp"
+        app:showAsAction="always"
+        android:visible="false"
+        android:title="@string/home">
+    </item>
+
+    <item
+        android:id="@+id/menu_home_action_empty"
+        android:icon="@drawable/ic_remove_shopping_cart_white_24dp"
+        app:showAsAction="always"
+        android:visible="true"
+        android:title="@string/home">
+    </item>
+
+</menu>

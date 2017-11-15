@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu_options">
+        <item>Reorder</item>
+        <item>Menu</item>
+        <item>Checkout</item>
+        <item>Clear Cart</item>
+        <item>About Us</item>
+    </string-array>
+
+    <string-array name="menu_items_list">
+        <item>White Rice</item>
+        <item>Garlic Rice</item>
+        <item>Fried Egg</item>
+        <item>Lumpia</item>
+        <item>Pancit</item>
+        <item>Sisig</item>
+        <item>Longanisa</item>
+        <item>Tocino</item>
+        <item>Adobo</item>
+        <item>Halo-Halo</item>
+    </string-array>
+
+    <string-array name="menu_items_price">
+        <!--White Rice-->
+        <item>1.00</item>
+        <!--Garlic Rice-->
+        <item>1.50</item>
+        <!--Fried Egg-->
+        <item>0.75</item>
+        <!--Lumpia-->
+        <item>0.75</item>
+        <!--Pancit-->
+        <item>2.50</item>
+        <!--Sisig-->
+        <item>5.00</item>
+        <!--Longanisa-->
+        <item>5.00</item>
+        <!--Tocino-->
+        <item>5.00</item>
+        <!--Adobo-->
+        <item>5.00</item>
+        <!--Halo-Halo-->
+        <item>5.00</item>
+    </string-array>
+
+    <string-array name="menu_item_descriptions">
+        <item>Lorem ipsum dolor sit amet, ipsum pulvinar augue duis autem, molestie id eleifend ut. Dolor iaculis aliquam amet, aliquet purus volutpat in. Aliquet nec consequat ac, sit vitae tempus amet amet. Etiam in facilisis pellentesque accumsan, pretium nunc massa adipiscing ultrices, bibendum et congue conubia sem, magna mauris montes consectetuer. Dolor ut elit neque, integer scelerisque nunc lorem, blandit donec ipsum inceptos sed.</item>
+        <item>Lorem ipsum dolor sit amet, ipsum pulvinar augue duis autem, molestie id eleifend ut. Dolor iaculis aliquam amet, aliquet purus volutpat in. Aliquet nec consequat ac, sit vitae tempus amet amet. Etiam in facilisis pellentesque accumsan, pretium nunc massa adipiscing ultrices, bibendum et congue conubia sem, magna mauris montes consectetuer. Dolor ut elit neque, integer scelerisque nunc lorem, blandit donec ipsum inceptos sed.</item>
+        <item>Lorem ipsum dolor sit amet, ipsum pulvinar augue duis autem, molestie id eleifend ut. Dolor iaculis aliquam amet, aliquet purus volutpat in. Aliquet nec consequat ac, sit vitae tempus amet amet. Etiam in facilisis pellentesque accumsan, pretium nunc massa adipiscing ultrices, bibendum et congue conubia sem, magna mauris montes consectetuer. Dolor ut elit neque, integer scelerisque nunc lorem, blandit donec ipsum inceptos sed.</item>
+        <item>Lumpia consists of a thin rice or wheat flour wrapper filled with a mixture of meat (most often ground pork or ground beef), cabbage, carrots, onions, and garlic. An egg wash is used to seal the lumpia wrapper to ensure none of the filling escapes when it is deep fried.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+        <item>Lorem ipsum dolor sit amet, bibendum eros commodo ut. Risus pellentesque cras, accumsan wisi at, cum duis condimentum mauris neque adipiscing purus, urna quis.</item>
+    </string-array>
+
+    <string-array name="menu_item_history">
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lumpia Shanghai is a example of the diversity of influences that have affected the Philippines throughout the years. Lumpia is a derivative of the Chinese spring roll adapted to the Filipino Culture. There are also other versions of the Lumpia. Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+        <item>
+            Lorem ipsum dolor sit amet, luctus ut consectetuer hendrerit at, vitae ut a eget id. Arcu ridiculus ut orci, ut molestie ut lectus libero, enim neque in vitae. Commodo id sollicitudin dignissim, fusce lorem metus ornare, lobortis sodales neque mauris. Lacus accumsan ut imperdiet, aliquam parturient ut mauris eum, molestie vulputate felis gravida nunc, vel nibh vulputate potenti. Quas cursus iusto luctus sapien, accumsan nisl aliquam vestibulum ornare, tortor eleifend dolor mi, commodo vestibulum in elit feugiat. Tempus vivamus at gravida velit, lectus in in euismod augue. Odio lectus dui tellus sodales, nullam metus lorem sit rhoncus, ridiculus ligula wisi urna, sit et sit pulvinar donec. Maecenas et elit lorem, pharetra integer aliquam curabitur nam. Amet ante accumsan felis, lobortis in nisl ultricies, tristique arcu vehicula erat, donec vulputate sed maecenas.
+        </item>
+    </string-array>
+
+</resources>
