@@ -45,6 +45,6 @@ Order Screen (Tablet) </br>
 	* Design
 	* Palette
   
-  ### Notes:
-  * Republish of Lumpia Shmompia
-    * Uploaded through more proper git and githun channels to show proficieny in git commits, push, pulls, etc.
+ ### Notes:
+ * Republish of Lumpia Shmompia
+ 	* Uploaded through more proper git and githun channels to show proficieny in git commits, push, pulls, etc.
