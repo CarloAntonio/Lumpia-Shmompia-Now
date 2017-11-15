@@ -36,9 +36,8 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     public static final String SAVED_INSTANCE_ITEM_ID = "savedItemID";
 
     //Variables
-    private String[] mMenuTitles;
     private ActionBarDrawerToggle mDrawerToggle;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences mSharedPreferences;
     private long currentItemId;
 
     //Views
@@ -60,16 +59,13 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         //Setup custom toolbar
         setSupportActionBar(mToolbar);
 
-        //Get reference of Shared Preference
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        //Setup Hamburger Menu
-        mMenuTitles = getResources().getStringArray(R.array.menu_options);
+        //Get reference of Shared Preference & SP Editor
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
 
         mDrawerLayout.setScrimColor(ContextCompat.getColor(this, android.R.color.transparent));
 
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mMenuTitles));
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
         mDrawerList.setOnItemClickListener(new AdapterClickListener());
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {
@@ -176,7 +172,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        if (sharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
+        if (mSharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
             menu.findItem(R.id.menu_home_action).setVisible(false);
             menu.findItem(R.id.menu_home_action_empty).setVisible(true);
         } else {
@@ -198,16 +194,15 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
             //Get Instance of shared preference editor
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
 
             switch (position) {
                 case 0:
-                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                    if (sharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
+                    if (mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
                         Toast.makeText(getBaseContext(), R.string.no_previous_order, Toast.LENGTH_SHORT).show();
                     } else {
                         //Update shared preference with old order
-                        String previousOrder = sharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
+                        String previousOrder = mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
                         editor.putString(MenuActivity.CHECKOUT_LIST, previousOrder);
                         editor.apply();
 
@@ -221,7 +216,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
                     finish();
                     return;
                 case 2:
-                    if (sharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
+                    if (mSharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
                         Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.nothing_in_cart), Toast.LENGTH_SHORT).show();
                     } else {
                         Intent checkoutIntent = new Intent(getBaseContext(), OrderActivity.class);
@@ -249,7 +244,6 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
                     finish();
                     return;
                 default:
-                    return;
             }
         }
     }
