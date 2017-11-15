@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.riskitbiskit.lumpiashmompianow.R;
 import com.riskitbiskit.lumpiashmompianow.data.MenuContract;
 import com.riskitbiskit.lumpiashmompianow.data.MenuContract.MenuEntry;
+import com.riskitbiskit.lumpiashmompianow.utils.AdapterClickListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,7 +94,8 @@ public class AboutActivity extends AppCompatActivity {
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_options)));
 
         //set up click events with custom item click listener inner class
-        mDrawerList.setOnItemClickListener(new AboutActivity.AdapterClickListener());
+//        mDrawerList.setOnItemClickListener(new AboutActivity.AdapterClickListener());
+        mDrawerList.setOnItemClickListener(new AdapterClickListener(mContext, sharedPreferences));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close) {
             @Override
@@ -134,59 +136,6 @@ public class AboutActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public class AdapterClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            switch (position) {
-                case 0:
-                    //TODO: fix - crashes when code is run
-                    Intent reorderIntent = new Intent(mContext, OrderActivity.class);
-                    startActivity(reorderIntent);
-                    return;
-                case 1:
-                    //open menu activity
-                    Intent menuIntent = new Intent(mContext, MenuActivity.class);
-                    startActivity(menuIntent);
-                    finish();
-                    return;
-                case 2:
-                    //check to see if anything is in basket
-                    if (sharedPreferences.getString(CHECKOUT_LIST, EMPTY).contentEquals(EMPTY)) {
-                        //if nothing in basket, remind user
-                        Toast.makeText(mContext, R.string.nothing_in_cart, Toast.LENGTH_SHORT).show();
-                    } else {
-                        //if there is, open order activity
-                        Intent checkoutIntent = new Intent(mContext, OrderActivity.class);
-                        startActivity(checkoutIntent);
-                    }
-                    return;
-                case 3:
-                    //selete all items in checkout basket
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(CHECKOUT_LIST, EMPTY);
-                    editor.apply();
-
-                    //Reset all item totals in database
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(MenuEntry.COLUMN_ITEM_COUNT, getString(R.string.one));
-                    getContentResolver().update(CONTENT_URI, contentValues, null, null);
-
-                    //TODO: chore: stay in activity, show toast of basket being cleared
-                    //Restart activity
-                    Intent clearCartIntent = new Intent(mContext, MenuActivity.class);
-                    startActivity(clearCartIntent);
-                    finish();
-                    return;
-                case 4:
-                    Intent aboutIntent = new Intent(mContext, AboutActivity.class);
-                    startActivity(aboutIntent);
-                    finish();
-                    return;
-                default:
-            }
-        }
     }
 
     //TODO: refactor - replace with retrofit2
