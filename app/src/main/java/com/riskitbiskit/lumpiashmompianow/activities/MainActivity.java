@@ -114,7 +114,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         });
 
-        //TODO: Use Dagger in future updates
+        //TODO: refactor- use Dagger in future updates
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
@@ -189,6 +189,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         if (!videoRestored) {
             youTubePlayer.loadVideo(INTRO_VIDEO);
         }
+        //TODO: new feat - autoplay after orientation change
     }
 
     @Override
