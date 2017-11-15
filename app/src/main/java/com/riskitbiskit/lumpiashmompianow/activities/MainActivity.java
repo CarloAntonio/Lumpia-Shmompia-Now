@@ -37,7 +37,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     public static final String NUM_ITEMS = "numItems";
 
     //Variables
-    SharedPreferences sharedPreferences;
+    SharedPreferences mSharedPreferences;
+    int mPreviousItemCount;
 
     //Views
     @BindView(R.id.menu_container)
@@ -59,18 +60,26 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        checkForNewMenuItems(this);
-
         //Get reference of Shared Preference
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Updates database if number of items are changed from previous times.
+        //Caveat is if changes are made but same number of items remains the same.
+        checkForNewMenuItems();
+
+        //check if there was a previous order
+        if (mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
+            //if not, remove option to reorder
             reoderFrameLayout.setVisibility(View.GONE);
         } else {
+            //if so, show option to reorder
             reoderFrameLayout.setVisibility(View.VISIBLE);
         }
 
+        //initialize youtube player
         mTubePlayerView.initialize(API_KEY, this);
 
+        //upload image to relevant views
         Glide.with(this).load(R.drawable.menu).into(menuContainerImageView);
         Glide.with(this).load(R.drawable.restaurant).into(restaurantContainerImageView);
         Glide.with(this).load(R.drawable.reorder).into(reorderContainerImageView);
@@ -79,8 +88,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             @Override
             public void onClick(View view) {
                 //Update shared preference with old order
-                String previousOrder = sharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String previousOrder = mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY);
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(MenuActivity.CHECKOUT_LIST, previousOrder);
                 editor.apply();
 
@@ -105,6 +114,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         });
 
+        //TODO: Use Dagger in future updates
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
@@ -114,49 +124,51 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         mAdView.loadAd(adRequest);
     }
 
-    private void checkForNewMenuItems(Context context) {
-        //Get a reference to sharedPreferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    private void checkForNewMenuItems() {
 
         //Check what the item count was previously
-        int previousItemCount = sharedPreferences.getInt(NUM_ITEMS,0);
+        mPreviousItemCount = mSharedPreferences.getInt(NUM_ITEMS,0);
 
         //Check the current item count
-        String[] itemNames = context.getResources().getStringArray(R.array.menu_items_list);
+        String[] itemNames = getResources().getStringArray(R.array.menu_items_list);
 
         //Compare item count
-        if (previousItemCount != itemNames.length) {
-            deleteDatabase(context);
-            createDatabase(context);
+        if (mPreviousItemCount != itemNames.length) {
+            deleteDatabase();
+            createDatabase();
         }
     }
 
-    //Delete entire table, not currently used
-    public void deleteDatabase(Context context) {
+    //Delete entire table
+    public void deleteDatabase() {
         //rowsDeleted not used at this time
-        int rowsDeleted = context.getContentResolver().delete(MenuEntry.CONTENT_URI, null, null);
+        getContentResolver().delete(MenuEntry.CONTENT_URI, null, null);
     }
 
-    public void createDatabase(Context context) {
-        int[] imageResources = new int[] {R.drawable.white_rice,
-                R.drawable.garlic_rice, R.drawable.fried_egg, R.drawable.lumpia, R.drawable.pancit,
-                R.drawable.sisig, R.drawable.longanisa, R.drawable.tocino, R.drawable.adobo, R.drawable.halo};
+    //Create new table
+    public void createDatabase() {
 
-        String[] itemNames = context.getResources().getStringArray(R.array.menu_items_list);
+        //Create array of images
+        int[] imageResources = new int[] {
+            R.drawable.white_rice, R.drawable.garlic_rice, R.drawable.fried_egg,
+            R.drawable.lumpia, R.drawable.pancit, R.drawable.sisig, R.drawable.longanisa,
+            R.drawable.tocino, R.drawable.adobo, R.drawable.halo};
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //create array of food item names
+        String[] itemNames = getResources().getStringArray(R.array.menu_items_list);
+
+        //create reference to SP editor and add new number of food items
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(NUM_ITEMS, itemNames.length);
         editor.apply();
 
-        String[] itemPrice = context.getResources().getStringArray(R.array.menu_items_price);
+        //create arrays for each type of detail
+        String[] itemPrice = getResources().getStringArray(R.array.menu_items_price);
+        String[] itemDescription = getResources().getStringArray(R.array.menu_item_descriptions);
+        String[] itemHistory = getResources().getStringArray(R.array.menu_item_history);
+        String[] itemTotal = getResources().getStringArray(R.array.menu_items_price);
 
-        String[] itemDescription = context.getResources().getStringArray(R.array.menu_item_descriptions);
-
-        String[] itemHistory = context.getResources().getStringArray(R.array.menu_item_history);
-
-        String[] itemTotal = context.getResources().getStringArray(R.array.menu_items_price);
-
+        //go through each item and add to recently cleared database
         for (int i = 0; i < itemNames.length; i++) {
             //Create ContentValues (values of 1 row)
             ContentValues values = new ContentValues();
@@ -167,8 +179,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             values.put(MenuEntry.COLUMN_ITEM_RESOURCE, imageResources[i]);
             values.put(MenuEntry.COLUMN_ITEM_TOTAL, itemTotal[i]);
 
-            //responseUri not used at this time
-            Uri responseUri = context.getContentResolver().insert(MenuEntry.CONTENT_URI, values);
+            //add to food items to local database
+            getContentResolver().insert(MenuEntry.CONTENT_URI, values);
         }
     }
 
@@ -204,7 +216,6 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean videoRestored) {
-        
         if (!videoRestored) {
             youTubePlayer.loadVideo(INTRO_VIDEO);
         }
