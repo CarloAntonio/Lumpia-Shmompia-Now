@@ -184,36 +184,6 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         }
     }
 
-    //Currently not used
-    private void updateDatabase(Context context) {
-        int[] imageResources = new int[] {R.drawable.white_rice,
-                R.drawable.garlic_rice, R.drawable.fried_egg, R.drawable.lumpia, R.drawable.pancit,
-                R.drawable.sisig, R.drawable.longanisa, R.drawable.tocino, R.drawable.adobo, R.drawable.halo};
-
-        String[] itemNames = context.getResources().getStringArray(R.array.menu_items_list);
-
-        String[] itemPrice = context.getResources().getStringArray(R.array.menu_items_price);
-
-        String[] itemDescription = context.getResources().getStringArray(R.array.menu_item_descriptions);
-
-        String[] itemHistory = context.getResources().getStringArray(R.array.menu_item_history);
-
-        for (int i = 0; i < itemNames.length; i++) {
-            //Create ContentValues (values of 1 row)
-            ContentValues values = new ContentValues();
-            values.put(MenuEntry.COlUMN_ITEM_NAME, itemNames[i]);
-            values.put(MenuEntry.COLUMN_ITEM_PRICE, itemPrice[i]);
-            values.put(MenuEntry.COLUMN_ITEM_DESCRIPTION, itemDescription[i]);
-            values.put(MenuEntry.COLUMN_ITEM_HISTORY, itemHistory[i]);
-            values.put(MenuEntry.COLUMN_ITEM_RESOURCE, imageResources[i]);
-
-            Uri currentUri = ContentUris.withAppendedId(MenuEntry.CONTENT_URI, i);
-
-            //responseUri not used at this time
-            int numRowsUpdated = context.getContentResolver().update(currentUri, values, null, null);
-        }
-    }
-
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean videoRestored) {
         if (!videoRestored) {
