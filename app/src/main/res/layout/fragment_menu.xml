@@ -8,10 +8,7 @@
         android:id="@+id/menu_gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="4dp"
-        android:horizontalSpacing="4dp"
-        android:verticalSpacing="4dp"
         android:stretchMode="columnWidth"
-        android:numColumns="2"/>
+        android:numColumns="auto_fit"/>
 
 </FrameLayout>

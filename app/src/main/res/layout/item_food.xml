@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/food_iv"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/item_image_container"
         android:scaleType="centerCrop"/>
 
     <View
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/photo_background_protection"/>
 
     <TextView
         android:id="@+id/food_name_tv"
-        android:layout_width="200dp"
-        android:layout_marginTop="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:textColor="#FFF"
+        android:paddingTop="8dp"
+        android:layout_marginStart="8dp"
         android:textStyle="bold"/>
 
 </FrameLayout>
