@@ -136,7 +136,6 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     //refreshes page so that shopping icon updates correctly
-    //TODO: refactor - there may be a better way to do this, check for future date
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

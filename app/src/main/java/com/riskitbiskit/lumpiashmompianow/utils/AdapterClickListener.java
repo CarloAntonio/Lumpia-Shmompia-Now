@@ -65,21 +65,19 @@ public class AdapterClickListener implements AdapterView.OnItemClickListener {
                 }
                 return;
             case 3:
-                //selete all items in checkout basket
+                //select all items in checkout basket
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(CHECKOUT_LIST, EMPTY);
                 editor.apply();
 
-                //Reset all item totals in database
+                //reset all item totals in database
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(MenuContract.MenuEntry.COLUMN_ITEM_COUNT, mContext.getString(R.string.one));
                 mContext.getContentResolver().update(CONTENT_URI, contentValues, null, null);
 
-                //TODO: chore: stay in activity, show toast of basket being cleared
-                //Restart activity
-                Intent clearCartIntent = new Intent(mContext, MenuActivity.class);
-                mContext.startActivity(clearCartIntent);
-                ((Activity) mContext).finish();
+                //redraw options menu
+                ((Activity) mContext).invalidateOptionsMenu();
+                Toast.makeText(mContext, "Cart Cleared", Toast.LENGTH_SHORT).show();
                 return;
             case 4:
                 Intent aboutIntent = new Intent(mContext, AboutActivity.class);
