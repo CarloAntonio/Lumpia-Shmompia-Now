@@ -1,72 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:clickable="true"
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <!--Responsible for drawing icons-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"/>
+
+        <LinearLayout
+            android:id="@+id/two_panel_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.riskitbiskit.lumpiashmompia.MenuActivity">
+            android:layout_marginTop="56dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
-            <android.support.design.widget.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            <fragment
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/menu_fragment"
+                android:name="com.riskitbiskit.lumpiashmompianow.activities.MenuFragment"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"/>
 
-                <!--Responsible for drawing icons-->
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:layout_scrollFlags="enterAlways|scroll">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="#FFF"
-                        android:text="@string/lumpia_shmompia"/>
-
-                </android.support.v7.widget.Toolbar>
-
-            </android.support.design.widget.AppBarLayout>
-
-            <LinearLayout
-                android:id="@+id/two_panel_layout"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:id="@+id/detail_frag_container"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="56dp"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_weight="1"/>
 
-                <fragment
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/menu_fragment"
-                    android:name="com.riskitbiskit.lumpiashmompianow.activities.MenuFragment"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"/>
-
-                <FrameLayout
-                    android:id="@+id/detail_frag_container"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
-        </android.support.design.widget.CoordinatorLayout>
+        </LinearLayout>
 
     </FrameLayout>
 
