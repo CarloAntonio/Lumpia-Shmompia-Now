@@ -83,7 +83,6 @@ public class AboutActivity extends AppCompatActivity {
         setSupportActionBar(aboutToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //get reference of Shared Preference
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

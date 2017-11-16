@@ -56,7 +56,6 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //get reference of Shared Preference & SP Editor
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
