@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,16 +42,16 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     int mPreviousItemCount;
 
     //Views
-    @BindView(R.id.menu_container)
-    ImageView menuContainerImageView;
-    @BindView(R.id.restaurant_container)
-    ImageView restaurantContainerImageView;
-    @BindView(R.id.reorder_container)
-    ImageView reorderContainerImageView;
+    @BindView(R.id.reorder_bt)
+    Button mReorderBt;
+    @BindView(R.id.menu_bt)
+    Button mMenuBt;
+    @BindView(R.id.about_bt)
+    Button mAboutBt;
+    @BindView(R.id.main_bg_iv)
+    ImageView mMainBgIV;
     @BindView(R.id.youtube_view)
     YouTubePlayerView mTubePlayerView;
-    @BindView(R.id.main_reorder_view)
-    FrameLayout reoderFrameLayout;
     @BindView(R.id.adView)
     AdView mAdView;
 
@@ -70,21 +71,16 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         //check if there was a previous order
         if (mSharedPreferences.getString(OrderActivity.PREVIOUS_ORDER, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
             //if not, remove option to reorder
-            reoderFrameLayout.setVisibility(View.GONE);
+            mReorderBt.setVisibility(View.GONE);
         } else {
             //if so, show option to reorder
-            reoderFrameLayout.setVisibility(View.VISIBLE);
+            mReorderBt.setVisibility(View.VISIBLE);
         }
 
         //initialize youtube player
         mTubePlayerView.initialize(API_KEY, this);
 
-        //upload image to relevant views
-        Glide.with(this).load(R.drawable.menu).into(menuContainerImageView);
-        Glide.with(this).load(R.drawable.restaurant).into(restaurantContainerImageView);
-        Glide.with(this).load(R.drawable.reorder).into(reorderContainerImageView);
-
-        reorderContainerImageView.setOnClickListener(new View.OnClickListener() {
+        mReorderBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Update shared preference with old order
@@ -98,7 +94,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         });
 
-        menuContainerImageView.setOnClickListener(new View.OnClickListener() {
+        mMenuBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), MenuActivity.class);
@@ -106,7 +102,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
             }
         });
 
-        restaurantContainerImageView.setOnClickListener(new View.OnClickListener() {
+        mAboutBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), AboutActivity.class);
