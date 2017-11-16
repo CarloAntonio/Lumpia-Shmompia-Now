@@ -48,13 +48,10 @@ public class OrderActivity extends AppCompatActivity implements
 
     @BindView(R.id.order_toolbar)
     Toolbar orderToolbar;
-
     @BindView(R.id.order_lv)
     ListView orderListView;
-
     @BindView(R.id.order_total_tv)
     TextView orderTotalTV;
-
     @BindView(R.id.submit_order)
     Button submitButton;
 
@@ -66,12 +63,12 @@ public class OrderActivity extends AppCompatActivity implements
 
         emailAddress = new String[] {getString(R.string.company_email)};
 
-        //Setup toolbar
+        //setup toolbar
         setSupportActionBar(orderToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        //Get instance of shared preference
+        //get instance of shared preference
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         mOrderCursorAdapter = new OrderCursorAdapter(this, null);

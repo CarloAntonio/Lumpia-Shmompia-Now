@@ -20,14 +20,33 @@ import com.riskitbiskit.lumpiashmompianow.data.MenuContract;
 
 import java.text.DecimalFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.riskitbiskit.lumpiashmompianow.data.MenuContract.*;
 
 public class OrderCursorAdapter extends CursorAdapter{
+
+    //Constants
     public static final int QUANTITY_LOADER = 2;
 
+    //Fields
     private OnQuantityChangedListener mListener;
-
     private Activity mActivity;
+
+    //Views
+    @BindView(R.id.checkout_img)
+    ImageView mItemImageIV;
+    @BindView(R.id.order_item_name)
+    TextView mItemNameTV;
+    @BindView(R.id.item_total_tv)
+    TextView mItemTotalTV;
+    @BindView(R.id.minus_button)
+    Button mMinusButton;
+    @BindView(R.id.plus_button)
+    Button mPlusButton;
+    @BindView(R.id.order_quant)
+    TextView mOrderQuantTV;
 
     public OrderCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
@@ -48,13 +67,15 @@ public class OrderCursorAdapter extends CursorAdapter{
 
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
+        //bind views
+        ButterKnife.bind(this, view);
         //Find item views
-        ImageView imageView = view.findViewById(R.id.checkout_img);
-        TextView nameTV = view.findViewById(R.id.order_item_name);
-        TextView itemTotalTV = view.findViewById(R.id.item_total_tv);
-        Button minusButton = view.findViewById(R.id.minus_button);
-        final Button plusButton = view.findViewById(R.id.plus_button);
-        final TextView orderQuant = view.findViewById(R.id.order_quant);
+//        ImageView imageView = view.findViewById(R.id.checkout_img);
+//        TextView nameTV = view.findViewById(R.id.order_item_name);
+//        TextView itemTotalTV = view.findViewById(R.id.item_total_tv);
+//        Button minusButton = view.findViewById(R.id.minus_button);
+//        final Button plusButton = view.findViewById(R.id.plus_button);
+//        final TextView orderQuant = view.findViewById(R.id.order_quant);
 
         //Get values from cursor
         int imageResID = cursor.getInt(cursor.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
@@ -78,13 +99,13 @@ public class OrderCursorAdapter extends CursorAdapter{
         double itemTotalAsDouble = price * itemCount;
 
         //Set relevant views
-        Glide.with(context).load(imageResID).into(imageView);
-        nameTV.setText(itemName);
-        orderQuant.setText(String.valueOf(itemCount));
-        itemTotalTV.setText("$" + String.valueOf(decimalFormat.format(itemTotalAsDouble)));
+        Glide.with(context).load(imageResID).into(mItemImageIV);
+        mItemNameTV.setText(itemName);
+        mOrderQuantTV.setText(String.valueOf(itemCount));
+        mItemTotalTV.setText("$" + String.valueOf(decimalFormat.format(itemTotalAsDouble)));
 
         //Setup add quantity updates
-        plusButton.setOnClickListener(new View.OnClickListener() {
+        mPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //updates count column in database
@@ -107,7 +128,7 @@ public class OrderCursorAdapter extends CursorAdapter{
         });
 
         //Setup minus quantity updates
-        minusButton.setOnClickListener(new View.OnClickListener() {
+        mMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
