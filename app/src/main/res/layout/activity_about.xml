@@ -9,236 +9,217 @@
     android:clickable="true"
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/about_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/toolbar_height"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:background="@color/colorPrimary"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white"
+            android:elevation="4dp"/>
 
-            <android.support.design.widget.AppBarLayout
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="56dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-                <!--Responsible for drawing icons-->
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/about_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:layout_scrollFlags="enterAlways|scroll">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="#FFF"
-                        android:text="@string/lumpia_shmompia"/>
-
-                </android.support.v7.widget.Toolbar>
-
-            </android.support.design.widget.AppBarLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="56dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:contentDescription="@string/location_icon_image"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_location_on_black_24dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:gravity="center_vertical"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:text="@string/_554_ygnacio_valley_rd_walnut_creek_ca"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:contentDescription="@string/owner_icon_image"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_person_outline_black_24dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:gravity="center_vertical"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:text="@string/carlo_antonio_bilbao"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:contentDescription="@string/established_date_icon_image"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_cake_black_24dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:gravity="center_vertical"
-                            android:textStyle="bold"
-                            android:textSize="14sp"
-                            android:text="@string/october_12_2017"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:contentDescription="@string/image_container_for_current_weather"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_brightness_5_black_24dp"/>
-
-                        <TextView
-                            android:id="@+id/current_weather"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:gravity="center_vertical"
-                            android:textStyle="bold"
-                            android:textSize="14sp"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@color/colorPrimary"/>
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/location_icon_image"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_location_on_black_24dp"/>
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:textSize="16sp"
+                        android:layout_height="56dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center_vertical"
                         android:textStyle="bold"
-                        android:text="@string/mission_statement"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:textSize="14sp"
-                        android:text="@string/mission_statement_lorem"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="@string/map"/>
-
-                    <fragment
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:map="http://schemas.android.com/apk/res-auto"
-                        android:layout_margin="16dp"
-                        android:id="@+id/map"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:name="com.google.android.gms.maps.MapFragment"
-                        map:cameraBearing="225"
-                        map:cameraTargetLat="37.906795"
-                        map:cameraTargetLng="-122.062847"
-                        map:cameraTilt="65"
-                        map:cameraZoom="25"
-                        />
-
-                    <Button
-                        android:id="@+id/to_map_bt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="@string/take_me_to_lumpia_shmompia"/>
+                        android:text="@string/_554_ygnacio_valley_rd_walnut_creek_ca"/>
 
                 </LinearLayout>
 
-            </ScrollView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimary"/>
 
-        </android.support.design.widget.CoordinatorLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/owner_icon_image"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_person_outline_black_24dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:text="@string/carlo_antonio_bilbao"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimary"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/established_date_icon_image"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_cake_black_24dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:text="@string/october_12_2017"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimary"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/image_container_for_current_weather"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_brightness_5_black_24dp"/>
+
+                    <TextView
+                        android:id="@+id/current_weather"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="@string/mission_statement"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="14sp"
+                    android:text="@string/mission_statement_lorem"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="@string/map"/>
+
+                <fragment
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:layout_margin="16dp"
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:name="com.google.android.gms.maps.MapFragment"
+                    map:cameraBearing="225"
+                    map:cameraTargetLat="37.906795"
+                    map:cameraTargetLng="-122.062847"
+                    map:cameraTilt="65"
+                    map:cameraZoom="25"
+                    />
+
+                <Button
+                    android:id="@+id/to_map_bt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/take_me_to_lumpia_shmompia"/>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </FrameLayout>
 
