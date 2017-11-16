@@ -125,13 +125,15 @@ public class OrderActivity extends AppCompatActivity implements
         //swap out the old data with new data
         mOrderCursorAdapter.swapCursor(data);
 
+        //compose email
         final String emailMessage = getEmailMessage(data);
 
+        //handle click event
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //Setup intent and send
+                //setup intent and send
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse(getString(R.string.mailto)));
                 intent.putExtra(Intent.EXTRA_EMAIL, emailAddress);
@@ -143,16 +145,7 @@ public class OrderActivity extends AppCompatActivity implements
                 }
 
                 //Save order data
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String currentItemList = sharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(PREVIOUS_ORDER, currentItemList);
-
-                //Clean up current list
-                editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-
-                //Apply changes
-                editor.apply();
+                saveOrderToForReorder();
 
                 //Update widget
                 //Used: https://stackoverflow.com/questions/4424723/android-appwidget-wont-update-from-activity, for updating widget from activity
@@ -168,6 +161,19 @@ public class OrderActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    private void saveOrderToForReorder() {
+        //save order data
+        String currentItemList = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(PREVIOUS_ORDER, currentItemList);
+
+        //Clean up current list
+        editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+
+        //Apply changes
+        editor.apply();
     }
 
     private String getEmailMessage(Cursor data) {
