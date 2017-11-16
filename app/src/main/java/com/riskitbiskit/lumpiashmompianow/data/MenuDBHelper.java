@@ -21,6 +21,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
             MenuEntry.COLUMN_ITEM_HISTORY + " TEXT NOT NULL, " +
             MenuEntry.COLUMN_ITEM_RESOURCE + " INTEGER NOT NULL, " +
             MenuEntry.COLUMN_ITEM_COUNT + " INTEGER NOT NULL DEFAULT 1, " +
+            //TODO: chore - remove unused column
             MenuEntry.COLUMN_ITEM_TOTAL + " TEXT NOT NULL" +
             ");";
 

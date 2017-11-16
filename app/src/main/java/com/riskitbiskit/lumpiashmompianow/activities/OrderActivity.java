@@ -81,13 +81,13 @@ public class OrderActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        //Get SharedPreference data
+        //get shared preference data
         String itemList = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<String>>() {}.getType();
         ArrayList<String> cartList = gson.fromJson(itemList, type);
 
-        //Define projection (what columns we want returned)
+        //define projection (what columns we want returned)
         String[] projection = {
                 MenuEntry._ID,
                 MenuEntry.COlUMN_ITEM_NAME,
@@ -97,10 +97,11 @@ public class OrderActivity extends AppCompatActivity implements
                 MenuEntry.COLUMN_ITEM_TOTAL
         };
 
-        //Define selectionArgs (what column values we are looking at)
+        //define selectionArgs (what row values we are looking for)
+        //convert array list of strings to array of strings
         String[] selectionArgs = cartList.toArray(new String[cartList.size()]);
 
-        //Define selection (what column we are looking at)
+        //Define selection (which rows we want returned)
         String selection = MenuEntry.COlUMN_ITEM_NAME + " IN (";
 
         for (String selectionArg : selectionArgs) {
@@ -110,23 +111,74 @@ public class OrderActivity extends AppCompatActivity implements
         selection = selection.substring(0, selection.length() - 2) + ")";
 
         //Kick off loader
-        CursorLoader cursorLoader = new CursorLoader(getBaseContext(),
+        return new CursorLoader(getBaseContext(),
                 MenuEntry.CONTENT_URI,
                 projection,
                 selection,
                 selectionArgs,
                 null);
 
-        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //swap out the old data with new data
         mOrderCursorAdapter.swapCursor(data);
 
-        double orderTotal = 0.00;
+        final String emailMessage = getEmailMessage(data);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Setup intent and send
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse(getString(R.string.mailto)));
+                intent.putExtra(Intent.EXTRA_EMAIL, emailAddress);
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+                intent.putExtra(Intent.EXTRA_TEXT, emailMessage);
+
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+
+                //Save order data
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String currentItemList = sharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(PREVIOUS_ORDER, currentItemList);
+
+                //Clean up current list
+                editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+
+                //Apply changes
+                editor.apply();
+
+                //Update widget
+                //Used: https://stackoverflow.com/questions/4424723/android-appwidget-wont-update-from-activity, for updating widget from activity
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), ReorderWidgetProvider.class));
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_lv);
+                if (appWidgetIds.length > 0) {
+                    new ReorderWidgetProvider().onUpdate(getBaseContext(), appWidgetManager, appWidgetIds);
+                }
+
+                //finish activites
+                finishAffinity();
+
+            }
+        });
+    }
+
+    private String getEmailMessage(Cursor data) {
+
+        //starting message
         String emailMessage = "Hello, \n\n New Order \n\n ";
 
+        //starting total
+        double orderTotal = 0.00;
+
+        //move to the first row of cursor
         data.moveToFirst();
         do {
             /*
@@ -160,49 +212,7 @@ public class OrderActivity extends AppCompatActivity implements
 
         emailMessage = emailMessage + "Order Total: $" + decimalFormat.format(orderTotal)  + "\n\n\n End Order.";
 
-        final String finalEmailMessage = emailMessage;
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Setup intent and send
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse(getString(R.string.mailto)));
-                intent.putExtra(Intent.EXTRA_EMAIL, emailAddress);
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
-                intent.putExtra(Intent.EXTRA_TEXT, finalEmailMessage);
-
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-
-                //Save order data
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String currentItemList = sharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(PREVIOUS_ORDER, currentItemList);
-
-                //Clean up current list
-                editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-
-                //Apply changes
-                editor.apply();
-
-                //Update widget
-                //Used: https://stackoverflow.com/questions/4424723/android-appwidget-wont-update-from-activity, for updating widget from activity
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), ReorderWidgetProvider.class));
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_lv);
-                if (appWidgetIds.length > 0) {
-                    new ReorderWidgetProvider().onUpdate(getBaseContext(), appWidgetManager, appWidgetIds);
-                }
-
-                //finish activites
-                finishAffinity();
-
-            }
-        });
+        return emailMessage;
     }
 
     @Override

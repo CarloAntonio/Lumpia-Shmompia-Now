@@ -166,6 +166,7 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         String[] itemPrice = getResources().getStringArray(R.array.menu_items_price);
         String[] itemDescription = getResources().getStringArray(R.array.menu_item_descriptions);
         String[] itemHistory = getResources().getStringArray(R.array.menu_item_history);
+        //TODO: chore - remove unused column
         String[] itemTotal = getResources().getStringArray(R.array.menu_items_price);
 
         //go through each item and add to recently cleared database
