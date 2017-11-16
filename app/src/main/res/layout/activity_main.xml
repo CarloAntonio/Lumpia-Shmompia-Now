@@ -13,26 +13,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/colorPrimary"
-        app:theme="@style/MyToolbarStyle">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="16dp"
-                android:textColor="@android:color/white"
-                android:text="@string/lumpia_shmompia"/>
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
+        app:title="@string/app_name"
+        app:titleTextColor="@color/white"
+        android:elevation="4dp"/>
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_view"

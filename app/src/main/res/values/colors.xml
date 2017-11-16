@@ -5,4 +5,7 @@
     <color name="colorAccent">#bc8596</color>
 
     <color name="transparent">#00000000</color>
+
+    <!--General Colors-->
+    <color name="white">#FFF</color>
 </resources>
