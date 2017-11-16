@@ -43,7 +43,7 @@ public class MenuActivity extends AppCompatActivity implements MenuFragment.OnMe
     DrawerLayout mDrawerLayout;
     @BindView(R.id.left_drawer)
     ListView mDrawerList;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.menu_toolbar)
     Toolbar mToolbar;
 
     @Override
