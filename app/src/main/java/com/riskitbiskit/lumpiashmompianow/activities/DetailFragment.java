@@ -38,29 +38,33 @@ import butterknife.ButterKnife;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //TODO: Refactor - add this fragment to detail activity, whiddle down excess code
+
     //Constants
     public static final int DETAIL_FRAG_LOADER = 5;
 
     //Private Variables
     private SharedPreferences mSharedPreferences;
     private Uri requestedItemUri;
+    ArrayList<String> mCartList;
+    String mItemName;
+    String mItemPrice;
+    String mItemDescrip;
+    String mItemHist;
+    int mItemImgRes;
 
     @BindView(R.id.frag_food_description_tv)
     TextView descriptionTV;
-
     @BindView(R.id.frag_food_price_tv)
     TextView priceTV;
-
     @BindView(R.id.frag_food_history_tv)
     TextView historyTV;
-
     @BindView(R.id.frag_detail_border)
     LinearLayout borderLayout;
-
     @BindView(R.id.frag_detail_fab)
     FloatingActionButton detailFab;
 
-    //Setter Methods
+    //setter method
     public void setRequestedItemUri (long id) {
         requestedItemUri = ContentUris.withAppendedId(MenuEntry.CONTENT_URI, id);
     }
@@ -69,6 +73,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        //bind views
         ButterKnife.bind(this, rootView);
 
         return rootView;
@@ -78,9 +83,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //Initialize sharedPreference
+        //initialize shared preferences
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
+        //kick-off call to database
         getActivity().getSupportLoaderManager().restartLoader(DETAIL_FRAG_LOADER, null, this);
 
     }
@@ -96,32 +102,31 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 MenuEntry.COLUMN_ITEM_RESOURCE
         };
 
-        CursorLoader cursorLoader = new CursorLoader(getContext(),
+        return new CursorLoader(getContext(),
                 requestedItemUri,
                 projection,
                 null,
                 null,
                 null);
 
-        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            final String itemName = data.getString(data.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME));
-            String itemPrice = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_PRICE));
-            String itemDesc = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_DESCRIPTION));
-            String itemHist = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_HISTORY));
-            int itemImgRes = data.getInt(data.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
+            mItemName = data.getString(data.getColumnIndex(MenuEntry.COlUMN_ITEM_NAME));
+            mItemPrice = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_PRICE));
+            mItemDescrip = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_DESCRIPTION));
+            mItemHist = data.getString(data.getColumnIndex(MenuEntry.COLUMN_ITEM_HISTORY));
+            mItemImgRes = data.getInt(data.getColumnIndex(MenuEntry.COLUMN_ITEM_RESOURCE));
 
             //Set data to relevant views
-            descriptionTV.setText(itemDesc);
-            priceTV.setText("$" + itemPrice);
-            historyTV.setText(itemHist);
+            descriptionTV.setText(mItemDescrip);
+            priceTV.setText("$" + mItemPrice);
+            historyTV.setText(mItemHist);
 
             //Update the border color
-            updateBorderColor(itemImgRes);
+            updateBorderColor(mItemImgRes);
 
             //Setup FAB
             detailFab.setOnClickListener(new View.OnClickListener() {
@@ -129,55 +134,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 public void onClick(View view) {
                     if (mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY).contentEquals(MenuActivity.EMPTY)) {
                         //if no list, create a list
-                        ArrayList<String> cartList = new ArrayList<>();
-                        cartList.add(itemName);
-
-                        //Convert list to String via Gson
-                        Gson gson = new Gson();
-                        String json = gson.toJson(cartList);
-
-                        //Add to shared preference
-                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putString(MenuActivity.CHECKOUT_LIST, json);
-                        editor.apply();
-
-                        //Redraw options menu
-                        getActivity().invalidateOptionsMenu();
-
+                        createNewCartList();
                     } else {
-                        //Get old list first
-                        String json = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-                        ArrayList<String> cartList = gson.fromJson(json, type);
-
-                        boolean isCopy = false;
-
-                        for(int i = 0; i < cartList.size(); i++) {
-                            String currentItem = cartList.get(i);
-                            if (currentItem.contentEquals(itemName)) {
-                                isCopy = true;
-                                break;
-                            } else {
-                                isCopy = false;
-                            }
-                        }
-
-                        //Check if it is a copy
-                        if (isCopy) {
-                            Toast.makeText(getContext(), getContext().getString(R.string.already_in_cart), Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Add to list
-                            cartList.add(itemName);
-                            String newJson = gson.toJson(cartList);
-
-                            //Add updated list to shared preference
-                            SharedPreferences.Editor editor = mSharedPreferences.edit();
-                            editor.putString(MenuActivity.CHECKOUT_LIST, newJson);
-                            editor.apply();
-
-                            Toast.makeText(getContext(), getContext().getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
-                        }
+                        //get old list first
+                        addItemToCartList();
                     }
                 }
             });
@@ -186,7 +146,68 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        //do nothing
+    }
 
+    private void createNewCartList() {
+        //create new cart list
+        mCartList = new ArrayList<>();
+        mCartList.add(mItemName);
+
+        //convert list to String via Gson
+        Gson gson = new Gson();
+        String json = gson.toJson(mCartList);
+
+        //add to shared preference
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(MenuActivity.CHECKOUT_LIST, json);
+        editor.apply();
+
+        //redraw options menu
+        getActivity().invalidateOptionsMenu();
+    }
+
+    private void addItemToCartList() {
+        //get old list first
+        String json = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+
+        //convert list from string to array list
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        mCartList = gson.fromJson(json, type);
+
+        //check if item is already on the list
+        boolean isCopy = false;
+        for (int i = 0; i < mCartList.size(); i++) {
+            String currentItem = mCartList.get(i);
+            if (currentItem.contentEquals(mItemName)) {
+                isCopy = true;
+                break;
+            } else {
+                isCopy = false;
+            }
+        }
+
+        //set action for copy or unique item
+        if (isCopy) {
+            //if item already in cart, remind user
+            Toast.makeText(getContext(), R.string.already_in_cart, Toast.LENGTH_SHORT).show();
+        } else {
+            //if not, add to list
+            mCartList.add(mItemName);
+
+            //convert list back to string to prep for SP saving
+            String newJson = gson.toJson(mCartList);
+
+            //Add updated list to shared preference
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putString(MenuActivity.CHECKOUT_LIST, newJson);
+            editor.apply();
+
+            //let user know that it was added to cart
+            Toast.makeText(getContext(), R.string.added_to_cart, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateBorderColor(int itemImgRes) {
