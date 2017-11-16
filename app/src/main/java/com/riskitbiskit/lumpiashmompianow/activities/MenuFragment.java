@@ -141,9 +141,8 @@ public class MenuFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Intent refresh = new Intent(getContext(), MenuActivity.class);
-            startActivity(refresh);
-            getActivity().finish();
+            //redraw options menu
+            getActivity().invalidateOptionsMenu();
         }
     }
 }
