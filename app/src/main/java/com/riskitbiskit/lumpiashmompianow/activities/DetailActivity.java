@@ -184,6 +184,9 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(MenuActivity.CHECKOUT_LIST, json);
         editor.apply();
+
+        //let user know that it was added to cart
+        Toast.makeText(this, R.string.added_to_cart, Toast.LENGTH_SHORT).show();
     }
 
     private void addItemToCartList() {

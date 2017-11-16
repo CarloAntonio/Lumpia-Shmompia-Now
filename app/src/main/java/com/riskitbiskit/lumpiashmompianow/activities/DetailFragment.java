@@ -165,6 +165,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         //redraw options menu
         getActivity().invalidateOptionsMenu();
+
+        //let user know that it was added to cart
+        Toast.makeText(getContext(), R.string.added_to_cart, Toast.LENGTH_SHORT).show();
     }
 
     private void addItemToCartList() {
