@@ -148,13 +148,7 @@ public class OrderActivity extends AppCompatActivity implements
                 saveOrderToForReorder();
 
                 //Update widget
-                //Used: https://stackoverflow.com/questions/4424723/android-appwidget-wont-update-from-activity, for updating widget from activity
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), ReorderWidgetProvider.class));
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_lv);
-                if (appWidgetIds.length > 0) {
-                    new ReorderWidgetProvider().onUpdate(getBaseContext(), appWidgetManager, appWidgetIds);
-                }
+                updateWidget();
 
                 //finish activites
                 finishAffinity();
@@ -163,17 +157,9 @@ public class OrderActivity extends AppCompatActivity implements
         });
     }
 
-    private void saveOrderToForReorder() {
-        //save order data
-        String currentItemList = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(PREVIOUS_ORDER, currentItemList);
-
-        //Clean up current list
-        editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
-
-        //Apply changes
-        editor.apply();
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mOrderCursorAdapter.swapCursor(null);
     }
 
     private String getEmailMessage(Cursor data) {
@@ -221,9 +207,27 @@ public class OrderActivity extends AppCompatActivity implements
         return emailMessage;
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mOrderCursorAdapter.swapCursor(null);
+    private void saveOrderToForReorder() {
+        //save order data
+        String currentItemList = mSharedPreferences.getString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(PREVIOUS_ORDER, currentItemList);
+
+        //Clean up current list
+        editor.putString(MenuActivity.CHECKOUT_LIST, MenuActivity.EMPTY);
+
+        //Apply changes
+        editor.apply();
+    }
+
+    private void updateWidget() {
+        //Used: https://stackoverflow.com/questions/4424723/android-appwidget-wont-update-from-activity, for updating widget from activity
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), ReorderWidgetProvider.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_lv);
+        if (appWidgetIds.length > 0) {
+            new ReorderWidgetProvider().onUpdate(getBaseContext(), appWidgetManager, appWidgetIds);
+        }
     }
 
     @Override
