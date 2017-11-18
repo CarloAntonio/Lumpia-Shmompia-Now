@@ -16,22 +16,31 @@ This app can:
 
 ### User Facing Screens:
 Menu Screen (Phone) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749231-8e56bcc0-b42d-11e7-84cf-f50ef6ff25ae.png" width="400">
+<img src="https://user-images.githubusercontent.com/25759516/32975650-4f533ece-cbbe-11e7-9e28-f80e1ce92674.png" width="300">
 
-About Screen (Phone) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749232-8f7011ba-b42d-11e7-857f-f86ad5b98294.png" width="400">
+Menu Screen (Phone - Landscape, Menu Open) </br>
+<img src="https://user-images.githubusercontent.com/25759516/32975651-52e84ffc-cbbe-11e7-865f-8608fc32b60d.png" width="450">
 
-Hamburger Menu (Phone) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749233-90a0d5d8-b42d-11e7-8a2e-2965517ac3b5.png" width="400">
+Item Details Screen (Phone) </br>
+<img src="https://user-images.githubusercontent.com/25759516/32975653-55da7938-cbbe-11e7-86bc-30f7aef49948.png" width="300">
 
 Order Screen (Phone) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749235-92336aaa-b42d-11e7-8e8b-e36ec66a4b82.png" width="400">
+<img src="https://user-images.githubusercontent.com/25759516/32975655-5a6335c6-cbbe-11e7-9d4c-37fb30d3c986.png" width="300">
+
+About Us Screen (Phone) </br>
+<img src="https://user-images.githubusercontent.com/25759516/32975659-69ff58c0-cbbe-11e7-92e8-aa43e039c5eb.png" width="300">
+
+Welcome Screen (Tablet - Landscape) </br>
+<img src="https://user-images.githubusercontent.com/25759516/32975662-6e8d4172-cbbe-11e7-90a7-38b18d8b9827.png" width="700">
+
+Two Panel (Tablet - Landscape) </br>
+<img src="https://user-images.githubusercontent.com/25759516/32975663-70ec4a44-cbbe-11e7-9c05-90e4ee97bdd8.png" width="700">
 
 Two Panel (Tablet) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749236-94433b9a-b42d-11e7-96e9-06c87f599b88.png" width="600">
+<img src="https://user-images.githubusercontent.com/25759516/32975665-724a7e38-cbbe-11e7-819c-d458638f0a67.png" width="500">
 
 Order Screen (Tablet) </br>
-<img src="https://user-images.githubusercontent.com/25759516/31749239-97e60b56-b42d-11e7-9a39-c9447ca1f7c3.png" width="600">
+<img src="https://user-images.githubusercontent.com/25759516/32975666-74844a62-cbbe-11e7-8143-f2bdfe6bebc5.png" width="500">
 
 ### Libraries Used:
 * Butterknife
